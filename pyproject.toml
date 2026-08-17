@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "mipcandy"
-version = "1.1.1-alpha.1"
+version = "1.1.3"
 description = "A Candy for Medical Image Processing"
 license = "Apache-2.0"
 readme = "README.md"
@@ -18,8 +18,8 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-standard = ["pyvista"]
-all = ["pyvista", "mipcandy-bundles"]
+standard = ["plotly"]
+all = ["plotly", "scikit-image", "mipcandy-bundles"]
 
 [tool.hatch.build.targets.sdist]
 only-include = ["mipcandy"]

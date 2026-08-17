@@ -4,7 +4,7 @@ from mipcandy.config import load_settings, save_settings, load_secrets, save_sec
 from mipcandy.data import *
 from mipcandy.evaluation import EvalCase, EvalResult, Evaluator
 from mipcandy.frontend import *
-from mipcandy.inference import parse_predictant, Predictor
+from mipcandy.inference import parse_predictant, Predictor, StreamPredictor
 from mipcandy.layer import batch_int_multiply, batch_int_divide, LayerT, HasDevice, auto_device, WithPaddingModule, \
     WithNetwork
 from mipcandy.metrics import do_reduction, binary_dice, dice_similarity_coefficient, soft_dice
@@ -12,6 +12,6 @@ from mipcandy.presets import *
 from mipcandy.profiler import ProfilerFrame, Profiler
 from mipcandy.run import config
 from mipcandy.sanity_check import num_trainable_params, model_complexity_info, SanityCheckResult, sanity_check
-from mipcandy.training import TrainerToolbox, Trainer
+from mipcandy.training import TrainerToolbox, Trainer, set_seed
 from mipcandy.types import Setting, Settings, Params, Transform, SupportedPredictant, Colormap, Device, Shape2d, \
     Shape3d, Shape, AmbiguousShape, Paddings2d, Paddings3d, Paddings

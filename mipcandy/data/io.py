@@ -1,4 +1,4 @@
-from gc import collect
+from gc import collect, get_objects
 from math import floor
 from os import PathLike
 
@@ -8,7 +8,7 @@ from safetensors.torch import save_file, load_file
 
 from mipcandy.data.convertion import auto_convert
 from mipcandy.data.geometric import ensure_num_dimensions
-from mipcandy.types import Device
+from mipcandy.types import Device, AmbiguousShape
 
 
 def fast_save(x: torch.Tensor, path: str | PathLike[str]) -> None:
@@ -68,3 +68,26 @@ def empty_cache(device: Device) -> None:
             torch.cuda.empty_cache()
         case "mps":
             torch.mps.empty_cache()
+
+
+def dump_allocated_tensors() -> tuple[float, list[tuple[
+    float, AmbiguousShape, torch.dtype, torch.device, bool, str]]]:
+    """
+    :return: (total size in MB, [(size in MB, shape, dtype, device, requires_grad, grad_fn)])
+    """
+    tensors = []
+    for obj in get_objects():
+        try:
+            if not isinstance(obj, torch.Tensor):
+                continue
+        except ReferenceError:
+            continue
+        try:
+            tensors.append((
+                obj.numel() * obj.element_size() / 1048576, tuple(obj.shape), obj.dtype, obj.device, obj.requires_grad,
+                str(obj.grad_fn)
+            ))
+        except ReferenceError:
+            continue
+    tensors.sort(key=lambda t: t[0], reverse=True)
+    return sum(t[0] for t in tensors), tensors
